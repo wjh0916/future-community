@@ -6,7 +6,7 @@
         </div>
         <main class="main">
             <div class="main-box">
-                <div class="welcome">欢迎注册QQ</div>
+                <div class="welcome">欢迎注册未来社区</div>
                 <div class="header">每一天，乐在沟通。</div>
                 <Form ref="fromData" :model="fromData" :rules="fromRule">
                     <FormItem prop="user" label="昵称">
@@ -19,9 +19,16 @@
                         <Input type="tel" v-model="fromData.tel" size="large"></Input>
                     </FormItem>
                     <FormItem prop="tel" label="手机验证码">
-                        <Input type="text" v-model="fromData.VerificationCode" size="large"></Input>
+                        <Row style="width: 100%" type="flex" justify="space-between">
+                            <Col span="16">
+                            <Input type="text" v-model="fromData.VerificationCode" size="large"></Input>
+                            </Col>
+                            <Col flex="atuo" style="text-align: right">
+                            <Button type="info" size="large" ghost>获取验证码</Button>
+                            </Col>
+                        </Row>
                     </FormItem>
-                    <FormItem>
+                    <FormItem style="margin-top: 36px">
                         <Row>
                             <Col span="18">
                             <Button type="primary" @click="handleSubmit('fromData')" size="large">立即注册</Button>
