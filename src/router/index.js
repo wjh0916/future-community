@@ -7,7 +7,10 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'Home',
-    component: Home,
+    components: {
+      default: Home,
+      Top: () => import('../components/Top.vue')
+    },
     meta: {
       title: '未来社区首页',
       auth: true,
@@ -42,7 +45,10 @@ const routes = [{
   {
     path: '/topic',
     name: 'Topic',
-    component: () => import('../views/Topic.vue'),
+    components: {
+      default: () => import('../views/Topic.vue'),
+      Top: () => import('../components/Top.vue')
+    },
     meta: {
       title: '话题',
       auth: true,

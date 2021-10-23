@@ -6,10 +6,10 @@
         <div class="title">登录未来社区</div>
         <Form ref="fromData" :model="fromData" :rules="fromRule">
           <FormItem prop="user">
-            <Input type="text" v-model="fromData.user" placeholder="请输入昵称" size="large"></Input>
+            <Input type="text" prefix="ios-contact-outline" v-model="fromData.user" placeholder="请输入昵称" size="large"></Input>
           </FormItem>
           <FormItem prop="password">
-            <Input type="password" v-model="fromData.password" placeholder="请输入密码" size="large"></Input>
+            <Input type="password" prefix="ios-unlock-outline" v-model="fromData.password" placeholder="请输入密码" size="large"></Input>
           </FormItem>
           <FormItem>
             <Button type="primary" @click="handleSubmit('fromData')" size="large" long>登录</Button>

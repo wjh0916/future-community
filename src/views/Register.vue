@@ -8,7 +8,7 @@
             <div class="main-box">
                 <div class="welcome">欢迎注册未来社区</div>
                 <div class="header">每一天，乐在沟通。</div>
-                <Form ref="fromData" :model="fromData" :rules="fromRule">
+                <Form ref="fromData" :model="fromData" :rules="fromRule" hide-required-mark>
                     <FormItem prop="user" label="昵称">
                         <Input type="text" v-model="fromData.user" size="large"></Input>
                     </FormItem>

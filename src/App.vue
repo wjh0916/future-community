@@ -1,6 +1,8 @@
 <template>
   <div id="app">
+    <router-view name="Top" />
     <router-view />
+    <BackTop></BackTop>
   </div>
 </template>
 
@@ -11,5 +13,15 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+  }
+
+  .content {
+    padding: 0 16%;
+
+    .Breadcrumb {
+      text-align: left;
+      background: unset;
+      margin: 10px 0;
+    }
   }
 </style>
