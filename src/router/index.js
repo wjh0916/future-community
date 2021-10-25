@@ -58,7 +58,10 @@ const routes = [{
   {
     path: '/post',
     name: 'Post',
-    component: () => import('../views/Post.vue'),
+    components: {
+      default: () => import('../views/Post.vue'),
+      Top: () => import('../components/Top.vue')
+    },
     meta: {
       title: '发布新话题',
       auth: true,

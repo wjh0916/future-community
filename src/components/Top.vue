@@ -30,7 +30,7 @@
                             </template>
                             <MenuItem name="4-1">个人中心</MenuItem>
                             <MenuItem name="4-2">个人资料</MenuItem>
-                            <MenuItem name="4-3">退出登录</MenuItem>
+                            <MenuItem name="4-3" :to="{name:'Login'}">退出登录</MenuItem>
                         </Submenu>
                     </div>
                 </Menu>

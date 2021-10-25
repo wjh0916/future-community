@@ -127,7 +127,6 @@
         })
       },
       isActive(index) {
-        console.log(index);
         this.list[index].isPraise = !this.list[index].isPraise
       }
     }
