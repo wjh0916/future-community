@@ -161,7 +161,6 @@
           }
 
           .topBar-title {
-            text-align: left;
             color: #fff;
 
             .topBar-userName {

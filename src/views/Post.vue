@@ -81,6 +81,7 @@
             height: calc(100vh - 105px);
 
         }
+
         .main {
             display: flex;
             margin-top: 20px;
@@ -102,18 +103,14 @@
             .mainLeft {
                 width: 50%;
                 border-right: 1px solid rgb(226, 226, 226);
-
-                .postCheckbox {
-                    text-align: left;
-                }
-
-                .upImg {
-                    text-align: left;
-                }
             }
 
             .mainRight {
                 width: 50%;
+
+                .textTitle {
+                    text-align: center;
+                }
 
                 .textBody {
                     width: 100%;
@@ -121,7 +118,6 @@
                     word-wrap: break-word;
                     word-break: break-all;
                     text-indent: 2em;
-                    text-align: left;
                 }
             }
         }

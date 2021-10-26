@@ -71,7 +71,10 @@ const routes = [{
   {
     path: '/topicDetails/:id',
     name: 'TopicDetails',
-    component: () => import('../views/TopicDetails.vue'),
+    components: {
+      default: () => import('../views/TopicDetails.vue'),
+      Top: () => import('../components/Top.vue')
+    },
     meta: {
       title: '话题详情',
       auth: true,
@@ -115,7 +118,7 @@ const routes = [{
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })
