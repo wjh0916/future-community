@@ -27,7 +27,7 @@
         </Card>
         <div class="topicInfo">
           <Tabs type="card">
-            <TabPane label="详情">详情</TabPane>
+            <TabPane label="详情">{{card.body}}</TabPane>
             <TabPane label="评论">评论</TabPane>
           </Tabs>
         </div>
@@ -41,29 +41,21 @@
     name: 'TopicDetails',
     data() {
       return {
-        card: {
-          title: "title",
-          outline: "维护费春秋五霸分区霸分区我不违法全部霸分区我不违法全部我不违法全部丢去武汉",
-          praise: "888",
-          eye: "999",
-          createTime: "2020-12-12",
-          chat: "22",
-          category: [{
-              id: 1,
-              title: "前端",
-            },
-            {
-              id: 2,
-              title: "后端",
-            },
-            {
-              id: 3,
-              title: "大数据",
-            },
-          ],
-        }
+        card: []
       }
     },
+    created() {
+      let aid = this.$route.params.id
+      this.$artApi.list({
+          aid
+        })
+        .then((result) => {
+          this.card = result.data[0]
+          console.log(result);
+        }).catch((err) => {
+          console.log(err);
+        });
+    }
   }
 </script>
 
@@ -111,7 +103,7 @@
       background: #e3e8ee;
       padding: 16px;
 
-    
+
     }
   }
 </style>

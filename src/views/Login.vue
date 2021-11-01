@@ -4,17 +4,19 @@
       <Row type="flex" justify="center">
         <Col span="8" class="loginForm">
         <div class="title">登录未来社区</div>
-        <Form ref="fromData" :model="fromData" :rules="fromRule">
-          <FormItem prop="user">
-            <Input type="text" prefix="ios-contact-outline" v-model="fromData.user" placeholder="请输入昵称" size="large"></Input>
+        <Form ref="formCustom" :model="formCustom" :rules="ruleCustom">
+          <FormItem prop="phone">
+            <Input type="text" prefix="ios-call-outline" v-model="formCustom.phone" placeholder="请输入手机号"
+              size="large"></Input>
           </FormItem>
           <FormItem prop="password">
-            <Input type="password" prefix="ios-unlock-outline" v-model="fromData.password" placeholder="请输入密码" size="large"></Input>
+            <Input type="password" prefix="ios-unlock-outline" v-model="formCustom.password" placeholder="请输入密码"
+              size="large"></Input>
           </FormItem>
           <FormItem>
-            <Button type="primary" @click="handleSubmit('fromData')" size="large" long>登录</Button>
+            <Button type="primary" @click="handleSubmit('formCustom')" size="large" long>登录</Button>
           </FormItem>
-          <FormItem>
+          <FormItem class="toRegister">
             <router-link :to="{name:'Register'}">没有账号？去注册</router-link>
           </FormItem>
         </Form>
@@ -29,29 +31,37 @@
   export default {
     name: 'Login',
     data() {
+      const validatePhone = (rule, value, callback) => {
+        let reg = new RegExp(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/)
+        if (value === '') {
+          callback(new Error('手机号码不能为空'));
+          this.codeIsShow = false
+        } else if (!reg.test(value)) {
+          callback(new Error('请输入正确的手机号码'));
+          this.codeIsShow = false
+        } else {
+          callback()
+        }
+      }
+
       return {
-        fromData: {
-          user: '',
+        formCustom: {
+          phone: '',
           password: '',
         },
-        fromRule: {
-          user: [{
+        ruleCustom: {
+          phone: [{
             required: true,
-            message: '昵称不能为空',
-            trigger: 'blur'
+            type: 'string',
+            validator: validatePhone,
+            trigger: 'blur change'
           }],
           password: [{
-              required: true,
-              message: '密码不能为空',
-              trigger: 'blur'
-            },
-            {
-              type: 'string',
-              min: 6,
-              message: '密码不能小于6位数',
-              trigger: 'blur'
-            }
-          ]
+            required: true,
+            type: 'string',
+            message: '密码不能为空',
+            trigger: 'blur change'
+          }]
         }
       }
     },
@@ -59,9 +69,25 @@
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            this.$router.push('/')
-          } else {
-            this.$Message.error('');
+            this.$userApi.login(this.formCustom)
+              .then((result) => {
+                let {
+                  data: {
+                    token
+                  }
+                } = result
+
+                if (token) {
+                  this.$router.push({
+                    name: 'Home'
+                  })
+                  this.$Message.success('登录成功');
+                } else {
+                  this.$Message.error(result.msg.error);
+                }
+              }).catch((err) => {
+                console.log(err);
+              });
           }
         })
       }
@@ -81,6 +107,7 @@
 
       .title {
         margin-bottom: 40px;
+        text-align: center;
         font-size: 30px;
         font-weight: 700;
         color: rgb(49, 49, 49);
@@ -94,6 +121,10 @@
 
         .ivu-form-item {
           margin-bottom: 36px;
+        }
+
+        .toRegister {
+          text-align: center;
         }
       }
     }

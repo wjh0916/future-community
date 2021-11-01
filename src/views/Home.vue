@@ -5,11 +5,11 @@
         <div class="topBar">
           <div class="topBar-user">
             <div class="topBar-userAvatar">
-              <Avatar shape="square" src="https://picsum.photos/100/100/?image=2" class="userAvatar-img" />
+              <Avatar shape="square" :src="this.userList.avatar" class="userAvatar-img" />
             </div>
             <div class="topBar-title">
-              <div class="topBar-userName">慕尘</div>
-              <div class="topBar-welcome">上午好，欢迎您回来</div>
+              <div class="topBar-userName">{{userList.username}}</div>
+              <div class="topBar-welcome">{{date}}好，欢迎您回来</div>
               <div class="topBar-msg">你发布的话题有11个新的回复</div>
             </div>
           </div>
@@ -32,10 +32,10 @@
           </div>
           <div class="recommend-main">
             <Row :gutter="50">
-              <Col span="8" v-for="(l,index) in list" :key="l.id">
-              <Card :bordered="false" :key="l.id">
+              <Col span="8" v-for="l in list" :key="l.aid" style="margin: 20px 0">
+              <Card :bordered="false" :key="l.aid">
                 <div class="card-img">
-                  <img :src="l.imgArr[0]">
+                  <img :src="l.imgUrl">
                 </div>
                 <div class="card-title">
                   <p>{{l.title}}</p>
@@ -43,7 +43,7 @@
                 <div class="card-hr"></div>
                 <div class="card-info">
                   <div class="card-info-left">
-                    <Button type="info" @click="toTopicDetails(l.id)">点击查看</Button>
+                    <Button type="info" @click="toTopicDetails(l.aid)">点击查看</Button>
                   </div>
                   <div class="card-info-right">
                     <div class="card-info-icon">
@@ -54,8 +54,8 @@
                       <Icon type="ios-eye" />
                       {{l.eye}}
                     </div>
-                    <div class="card-info-icon">
-                      <Icon :type="l.isPraise ? 'md-heart' : 'md-heart-outline'" @click="isActive(index)" />
+                    <div class="card-info-icon praise">
+                      <Icon :type="praiseList[l.aid] ? 'md-heart' : 'md-heart-outline'" @click="isPraise(l.aid)" />
                       {{l.praise}}
                     </div>
                   </div>
@@ -71,8 +71,30 @@
 </template>
 
 <script>
+  import {
+    mapState
+  } from 'vuex'
+
   export default {
     name: 'Home',
+    created() {
+      this.$userApi.currentUser()
+        .then((result) => {
+          if (result.ret === 200) {
+            this.$store.commit('add', result.data)
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
+
+      this.$artApi.list()
+        .then((result) => {
+          this.list = result.data
+          console.log(this.list);
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
     data() {
       return {
         value2: 0,
@@ -84,32 +106,21 @@
           'https://picsum.photos/1600/800/?image=13',
           'https://picsum.photos/1600/800/?image=14'
         ],
-        list: [{
-          id: 1,
-          uId: 1,
-          title: '发给四个发给四个发给四个发给四个发给四个发给四个发给四个发给四个发给四个',
-          imgArr: ['https://picsum.photos/1600/800/?image=10'],
-          eye: 1999,
-          chat: 789,
-          time: '2021-10-22 077:11:33',
-          body: '负担加工费负担加工费负担加工费负担加工费负担加工费负担加工费负担加工费负担加工费',
-          praise: 5,
-          isPraise: false,
-          category: [],
-          status: 0
-        }, {
-          id: 2,
-          uId: 1,
-          title: '发给四个发给四个发给四个发给四个发给四个发给四个发给四个发给四个发给四个',
-          imgArr: ['https://picsum.photos/1600/800/?image=12'],
-          eye: 1999,
-          chat: 789,
-          time: '2021-10-22 077:11:33',
-          body: '负担加工费负担加工费负担加工费负担加工费负担加工费负担加工费负担加工费负担加工费',
-          praise: 5,
-          category: [],
-          status: 0
-        }]
+        list: [],
+        praiseList: [],
+      }
+    },
+    computed: {
+      ...mapState(["userList"]),
+
+      date() {
+        let date = new Date(this.userList.loginTime)
+        let hours = date.getHours()
+        if (hours >= 0 && hours < 12) {
+          return '上午'
+        } else {
+          return '下午'
+        }
       }
     },
     methods: {
@@ -126,8 +137,22 @@
           }
         })
       },
-      isActive(index) {
-        this.list[index].isPraise = !this.list[index].isPraise
+      isPraise(index) {
+        if (this.praiseList[index]) {
+          this.praiseList[index] = !this.praiseList[index]
+        } else {
+          this.praiseList[index] = true
+        }
+
+        this.list.filter((value) => {
+          if (value.aid === index) {
+            if (this.praiseList[index]) {
+              value.praise++
+            } else {
+              value.praise--
+            }
+          }
+        })
       }
     }
   }
@@ -140,18 +165,20 @@
         min-width: 600px;
         display: flex;
         justify-content: space-between;
+        align-items: flex-end;
         background: url('https://picsum.photos/1600/1000/?image=10') no-repeat;
         background-size: cover;
         background-position: 100%;
         padding: 20px;
+        height: 215px;
         position: relative;
 
         .topBar-user {
           display: flex;
 
           .topBar-userAvatar {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             margin-right: 15px;
           }
 
@@ -170,7 +197,6 @@
 
             .topBar-welcome {
               font-size: 20px;
-              margin: 5px 0;
             }
 
             .topBar-msg {
@@ -228,7 +254,7 @@
         }
 
         .recommend-main {
-          margin: 25px 0;
+          margin-top: 20px;
 
           .card-img {
             width: 100%;
@@ -238,7 +264,6 @@
 
             img {
               width: 100%;
-              height: 100%;
               transition: all 500ms;
             }
 
@@ -285,6 +310,12 @@
                 .ivu-icon {
                   font-size: 18px;
                   vertical-align: middle;
+                }
+              }
+
+              .praise {
+                .ivu-icon {
+                  color: red;
                 }
               }
             }

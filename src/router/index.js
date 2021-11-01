@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '@/views/Home.vue'
+import {
+  post
+} from '@/api/index';
 
 Vue.use(VueRouter)
 
@@ -32,15 +35,6 @@ const routes = [{
     meta: {
       title: '用户注册'
     }
-  },
-  {
-    path: '/result/:type',
-    name: 'Result',
-    component: () => import('../views/Result.vue'),
-    meta: {
-      title: '操作结果'
-    },
-    props: true
   },
   {
     path: '/topic',
@@ -121,6 +115,26 @@ const router = new VueRouter({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes
+})
+
+// 判断是否需要登录权限
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth == true) {
+    // 需要登录权限
+    post('/isLogin.php')
+      .then((result) => {
+        if (result.ret === 200) {
+          next()
+        } else {
+          next({
+            name: 'Login'
+          })
+        }
+      }).catch(() => {});
+  } else {
+    // 不需要登录权限
+    return next();
+  }
 })
 
 router.afterEach((to) => {

@@ -76,11 +76,25 @@
             };
 
             const validatePhone = (rule, value, callback) => {
+                let reg = new RegExp(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/)
                 if (value === '') {
                     callback(new Error('手机号码不能为空'));
+                    this.codeIsShow = false
+                } else if (!reg.test(value)) {
+                    callback(new Error('请输入正确的手机号码'));
+                    this.codeIsShow = false
                 } else {
-                    this.codeIsShow = true
-                    callback();
+                    this.$userApi.verifyPhone({
+                            phone: value
+                        })
+                        .then((result) => {
+                            if (result.ret === 200) {
+                                this.codeIsShow = true
+                            }
+                            callback(result.msg.phone)
+                        }).catch((err) => {
+                            console.log(err)
+                        });
                 }
             }
 
@@ -99,13 +113,14 @@
                 ruleCustom: {
                     username: [{
                             required: true,
+                            type: 'string',
                             message: '昵称不能为空',
-                            trigger: 'blur'
+                            trigger: 'blur',
                         },
                         {
-                            pattern: /^[\u4e00-\u9fa5]{0,}$/,
-                            message: '昵称必须为汉字',
-                            trigger: 'blur'
+                            pattern: /^[\u4e00-\u9fa5a-zA-Z][\u4e00-\u9fa5a-zA-Z\d]+$/,
+                            message: '昵称必须以汉字或字母开头,其它可以是中文,字母或数字',
+                            trigger: 'change blur'
                         }
                     ],
                     password: [{
@@ -116,45 +131,26 @@
                         },
                         {
                             min: 6,
-                            message: '密码不能小于6位数',
-                            trigger: 'blur'
-                        },
-                        {
                             max: 16,
-                            message: '密码不能大于16位数',
-                            trigger: 'blur'
-                        }
+                            message: '密码必须为6到16位数',
+                            trigger: 'change blur'
+                        },
                     ],
                     confirmPassword: [{
-                            required: true,
-                            type: 'string',
-                            validator: validatePassCheck,
-                            trigger: 'blur'
-                        },
-                        {
-                            min: 6,
-                            message: '密码不能小于6位数',
-                            trigger: 'blur'
-                        },
-                        {
-                            max: 16,
-                            message: '密码不能大于16位数',
-                            trigger: 'blur'
-                        }
-                    ],
+                        required: true,
+                        type: 'string',
+                        validator: validatePassCheck,
+                        trigger: 'change'
+                    }],
                     phone: [{
-                            required: true,
-                            validator: validatePhone,
-                            trigger: 'blur'
-                        },
-                        {
-                            pattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
-                            message: '请输入正确的手机号码',
-                            trigger: 'blur'
-                        }
-                    ],
+                        required: true,
+                        type: 'string',
+                        validator: validatePhone,
+                        trigger: 'blur change'
+                    }],
                     smsCode: [{
                             required: true,
+                            type: 'string',
                             message: '手机验证码不能为空',
                             trigger: 'blur'
                         },
@@ -162,7 +158,7 @@
                             min: 6,
                             max: 6,
                             message: '手机验证码必须为6位数',
-                            trigger: 'change'
+                            trigger: 'change blur'
                         }
                     ]
                 }
@@ -179,29 +175,43 @@
                 }, 2800)
             },
             getSmsCode() {
-                this.$axios.post('/user/sms.php', {
-                    phone: this.formCustom.phone
-                }).then((result) => {
-                    alert('验证码为：' + result.data[0].code)
-                }).catch((err) => {
-                    console.log(err);
-                });
+                this.$userApi.sms({
+                        phone: this.formCustom.phone
+                    })
+                    .then((result) => {
+                        console.log(result);
+                        if (result.ret === 200) {
+                            this.$Message.success({
+                                content: '验证码为：' + result.data[0].code,
+                                duration: 10,
+                                closable: true
+                            })
+                        } else {
+                            this.$Message.warning({
+                                content: result.msg.result + ',当前验证码为：' + result.data.smsCode,
+                                duration: 10,
+                                closable: true
+                            })
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
             },
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.$axios.post('/user/register.php', {
-                            username: this.formCustom.username,
-                            password: this.formCustom.password,
-                            confirmPassword: this.formCustom.confirmPassword,
-                            phone: this.formCustom.phone,
-                            smsCode: this.formCustom.smsCode
-                        }).then((result) => {
-                            console.log(result);
-                        }).catch((err) => {
-                            console.log(err);
-                        });
-
+                        this.$userApi.register(this.formCustom)
+                            .then((result) => {
+                                console.log(result.msg[0]);
+                                this.$Message.success('注册成功，正在自动跳转中请勿操作....');
+                                setTimeout(() => {
+                                    this.$router.push({
+                                        name: 'Login'
+                                    })
+                                }, 2000)
+                            }).catch((err) => {
+                                console.log(err);
+                            });
                     } else {
                         this.$Message.error('注册失败');
                     }
