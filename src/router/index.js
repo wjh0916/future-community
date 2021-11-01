@@ -90,7 +90,10 @@ const routes = [{
   {
     path: '/personal',
     name: 'Personal',
-    component: () => import('../views/Personal.vue'),
+    components: {
+      default: () => import('../views/Personal.vue'),
+      Top: () => import('../components/Top.vue')
+    },
     meta: {
       title: '个人资料',
       auth: true,
@@ -101,7 +104,10 @@ const routes = [{
   {
     path: '/topicClass',
     name: 'TopicClass',
-    component: () => import('../views/TopicClass.vue'),
+    components: {
+      default: () => import('../views/TopicClass.vue'),
+      Top: () => import('../components/Top.vue')
+    },
     meta: {
       title: '话题分类',
       auth: true,

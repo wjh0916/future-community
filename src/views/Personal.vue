@@ -3,7 +3,7 @@
         <Layout>
             <Content class="content">
                 <div class="personalTitle">个人资料</div>
-                <Form class="main">
+                <Form class="main" :label-width="80" hide-required-mark>
                     <FormItem label="用户名">
                         <Input type="text" v-model="userList.username" placeholder="请输入用户名" size="large"></Input>
                     </FormItem>
@@ -127,6 +127,8 @@
                                 name: 'Home'
                             })
                             this.$Message.success('修改成功')
+                        } else {
+                            this.$Message.error(result.msg.error)
                         }
                     }).catch((err) => {
                         console.log(err);
@@ -138,7 +140,7 @@
 
 <style lang="scss" scoped>
     .personal {
-        height: 100vh;
+        height: calc(100vh - 105px);
 
         .ivu-layout {
             height: 100%;

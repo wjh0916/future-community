@@ -39,7 +39,7 @@
                                     <span>修改头像</span>
                                 </p>
                                 <div style="text-align:center">
-                                    <Form ref="" :model="passwordList" hide-required-mark>
+                                    <Form hide-required-mark>
                                         <FormItem>
                                             <el-upload action="#" list-type="picture-card"
                                                 :before-upload="beforeAvatarUpload"
@@ -163,6 +163,21 @@
                     }],
                 },
             }
+        },
+        created() {
+            if (sessionStorage.getItem("store")) {
+                this.$store.replaceState(
+                    Object.assign({},
+                        this.$store.state,
+                        JSON.parse(sessionStorage.getItem("store"))
+                    )
+                );
+                sessionStorage.removeItem("store")
+            }
+
+            window.addEventListener("beforeunload", () => {
+                sessionStorage.setItem("store", JSON.stringify(this.$store.state));
+            });
         },
         computed: {
             ...mapState(['userList']),

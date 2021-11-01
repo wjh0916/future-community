@@ -10,10 +10,11 @@
                                 <Input v-model="newTopic.title" maxlength="50" show-word-limit></Input>
                             </FormItem>
                             <FormItem label="话题分类">
-                                <el-checkbox-group v-model="newTopic.cid" size="medium" class="postCheckbox">
-                                    <el-checkbox-button v-for="(cate,index) in cateChoise" :label="cate" :key="index">
-                                        {{cate}}</el-checkbox-button>
-                                </el-checkbox-group>
+                                <CheckboxGroup v-model="cid">
+                                    <Checkbox :label="cate.cid" border v-for="cate in category" :key="cate.cid">
+                                        {{cate.title}}</Checkbox>
+                                    <Button type="info" icon="md-add" @click="toAdd" ghost></Button>
+                                </CheckboxGroup>
                             </FormItem>
                             <FormItem label="内容">
                                 <Input v-model="newTopic.body" type="textarea" :autosize="{minRows: 6,maxRows: 10}"
@@ -54,12 +55,12 @@
         name: 'Post',
         data() {
             return {
-                cateChoise: ['前端', 'Apple', 'Pineapple', 'Grape'],
+                category: [],
+                cid: [],
                 newTopic: {
                     title: '',
                     body: '',
                     outline: '',
-                    cid: [],
                     imgUrl: ''
                 },
                 isAuth: false,
@@ -67,7 +68,23 @@
                 dialogVisible: false
             }
         },
+        created() {
+            this.$categoryApi.list()
+                .then((result) => {
+                    if (result.ret === 200) {
+                        this.category = result.data
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
+        },
         methods: {
+            toAdd() {
+                this.$router.push({
+                    name: 'TopicClass'
+                })
+            },
+
             beforeAvatarUpload(file) {
                 const isLt2M = file.size / 1024 / 1024 < 0.5;
                 const isImg = file.type.includes('image');
@@ -103,6 +120,7 @@
                 this.dialogVisible = true;
             },
             handleRemove() {
+                this.dialogImageUrl = ''
                 this.newTopic.imgUrl = ''
             },
             handleExceed() {
@@ -111,17 +129,16 @@
             post() {
                 let list = this.newTopic
                 let cid = []
-                this.newTopic.cid.forEach((element, index) => {
+                this.cid.forEach((element, index) => {
                     if (index > 0) {
-                        cid += ',' + parseInt(this.cateChoise.map(item => item).indexOf(element) + 1)
+                        cid += ',' + element
                     } else {
-                        cid += parseInt(this.cateChoise.map(item => item).indexOf(element) + 1)
+                        cid = element
                     }
                 })
                 list.cid = cid
                 this.$artApi.post(list)
                     .then((result) => {
-                        console.log(result);
                         if (result.ret === 200) {
                             this.$router.push('/')
                             this.$message.success('发布成功')
@@ -161,6 +178,10 @@
             .mainLeft {
                 width: 50%;
                 border-right: 1px solid rgb(226, 226, 226);
+
+                .ivu-checkbox-group-item {
+                    margin-bottom: 10px;
+                }
             }
 
             .mainRight {

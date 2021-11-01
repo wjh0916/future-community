@@ -11,7 +11,8 @@ import axios from 'axios'
 import {
   userApi,
   artApi,
-  commonApi
+  commonApi,
+  categoryApi
 } from './api/api';
 
 Vue.config.productionTip = false
@@ -20,6 +21,7 @@ Vue.prototype.$axios = axios
 Vue.prototype.$userApi = userApi
 Vue.prototype.$artApi = artApi
 Vue.prototype.$commonApi = commonApi
+Vue.prototype.$categoryApi = categoryApi
 
 Vue.use(ViewUI)
 Vue.use(ElementUI)

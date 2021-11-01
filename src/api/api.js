@@ -72,6 +72,11 @@ export const userApi = {
         })
     },
 
+    /**
+     * 修改当前用户头像接口
+     * @param {*} data 
+     * @returns 
+     */
     upLoadAvatar(data) {
         return post('/user/upLoadAvatar.php', {
             data
@@ -122,6 +127,7 @@ export const artApi = {
     }
 }
 
+// 公共接口
 export const commonApi = {
     /**
      * 图片上传接口
@@ -132,6 +138,31 @@ export const commonApi = {
         return post('/common/filesUpload.php', {
             data,
             processData: false
+        })
+    }
+}
+
+// 分类接口
+export const categoryApi = {
+    /**
+     * 添加分类接口
+     * @param {*} data 
+     * @returns 
+     */
+    post(data) {
+        return post('/category/post.php', {
+            data
+        })
+    },
+
+    /**
+     * 分类列表接口
+     * @param {*} data 
+     * @returns 
+     */
+    list(data) {
+        return post('/category/list.php', {
+            data
         })
     }
 }
