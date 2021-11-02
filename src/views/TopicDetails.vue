@@ -55,8 +55,7 @@
         }).catch((err) => {
           console.log(err);
         });
-    },
-    mounted() {
+
       setTimeout(() => {
         this.$artApi.articleViews({
             aid: parseInt(this.aid)

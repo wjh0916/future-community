@@ -179,19 +179,8 @@
                         phone: this.formCustom.phone
                     })
                     .then((result) => {
-                        console.log(result);
-                        if (result.ret === 200) {
-                            this.$Message.success({
-                                content: '验证码为：' + result.data[0].code,
-                                duration: 10,
-                                closable: true
-                            })
-                        } else {
-                            this.$Message.warning({
-                                content: result.msg.result + ',当前验证码为：' + result.data.smsCode,
-                                duration: 10,
-                                closable: true
-                            })
+                        if (result.ret === 400) {
+                            this.$Message.warning(result.msg.result)
                         }
                     }).catch((err) => {
                         console.log(err);
