@@ -5,7 +5,9 @@ export function get(url, options) {
     return instance({
         url,
         method: 'get',
-        ...options
+        params: {
+            ...options
+        }
     })
 }
 

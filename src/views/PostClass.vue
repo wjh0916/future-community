@@ -3,11 +3,12 @@
         <Layout>
             <Content class="content">
                 <div class="personalTitle">添加新分类</div>
-                <Form class="main" :label-width="80" hide-required-mark>
-                    <FormItem label="分类标题">
+                <Form class="main" ref="category" :model="category" :rules="ruleCustom" :label-width="80"
+                    hide-required-mark>
+                    <FormItem prop="title" label="分类标题">
                         <Input v-model="category.title" maxlength="20" show-word-limit></Input>
                     </FormItem>
-                    <FormItem label="分类主体">
+                    <FormItem prop="body" label="分类主体">
                         <Input v-model="category.body" maxlength="50" show-word-limit></Input>
                     </FormItem>
                     <FormItem label="图片">
@@ -21,7 +22,7 @@
                         </el-dialog>
                     </FormItem>
                     <FormItem>
-                        <Button type="primary" @click="post" size="large">发布新分类</Button>
+                        <Button type="primary" @click="handleSubmit('category')" size="large">发布新分类</Button>
                     </FormItem>
                 </Form>
             </Content>
@@ -41,7 +42,39 @@
                 },
                 isAuth: false,
                 dialogImageUrl: '',
-                dialogVisible: false
+                dialogVisible: false,
+                ruleCustom: {
+                    title: [{
+                        required: true,
+                        type: 'string',
+                        message: '标题不能为空',
+                        trigger: 'blur'
+                    }, {
+                        pattern: /^.*[^\d].*$/,
+                        message: '标题不能为纯数字',
+                        trigger: 'blur change'
+                    }],
+                    body: [{
+                        required: true,
+                        type: 'string',
+                        message: '内容不能为空',
+                        trigger: 'blur'
+                    }, {
+                        pattern: /^.*[^\d].*$/,
+                        message: '内容不能为纯数字',
+                        trigger: 'blur change'
+                    }],
+                    outline: [{
+                        required: true,
+                        type: 'string',
+                        message: '简介不能为空',
+                        trigger: 'blur'
+                    }, {
+                        pattern: /^.*[^\d].*$/,
+                        message: '简介不能为纯数字',
+                        trigger: 'blur change'
+                    }]
+                }
             }
         },
         methods: {
@@ -86,20 +119,27 @@
             handleExceed() {
                 this.$message.warning(`当前只能上传 1 张图片`);
             },
-            post() {
-                this.$categoryApi.post(this.category)
-                    .then((result) => {
-                        if (result.ret === 200) {
-                            this.$router.push({
-                                name: 'Post'
-                            })
-                            this.$Message.success('发布成功')
-                        } else {
-                            this.$Message.success('发布失败')
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                    });
+
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$categoryApi.post(this.category)
+                            .then((result) => {
+                                if (result.ret === 200) {
+                                    this.$router.push({
+                                        name: 'Post'
+                                    })
+                                    this.$Message.success('发布成功')
+                                } else {
+                                    this.$Message.error('图片不能为空')
+                                }
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+                    } else {
+                        this.$Message.error('发布失败');
+                    }
+                })
             }
         }
     }

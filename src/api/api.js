@@ -1,5 +1,6 @@
 import {
-    post
+    post,
+    get
 } from './index'
 
 // 用户接口
@@ -115,6 +116,7 @@ export const artApi = {
             data
         })
     },
+
     /**
      * 发布新话题/文章接口
      * @param {*} data 
@@ -124,6 +126,15 @@ export const artApi = {
         return post('/art/post.php', {
             data
         })
+    },
+
+    /**
+     * 浏览接口
+     * @param {*} data 
+     * @returns 
+     */
+    articleViews(data) {
+        return get('/art/articleViews.php', data)
     }
 }
 

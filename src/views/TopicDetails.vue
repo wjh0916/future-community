@@ -41,21 +41,35 @@
     name: 'TopicDetails',
     data() {
       return {
-        card: []
+        card: [],
+        aid: ''
       }
     },
     created() {
-      let aid = this.$route.params.id
+      this.aid = this.$route.params.id
       this.$artApi.list({
-          aid
+          aid: this.aid
         })
         .then((result) => {
           this.card = result.data[0]
-          console.log(result);
         }).catch((err) => {
           console.log(err);
         });
-    }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.$artApi.articleViews({
+            aid: parseInt(this.aid)
+          })
+          .then((result) => {
+            if (result.ret === 400) {
+              console.log(result.msg);
+            }
+          }).catch((err) => {
+            console.log(err);
+          });
+      }, 2000)
+    },
   }
 </script>
 

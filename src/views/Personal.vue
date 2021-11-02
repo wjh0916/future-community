@@ -3,7 +3,8 @@
         <Layout>
             <Content class="content">
                 <div class="personalTitle">个人资料</div>
-                <Form class="main" :label-width="80" :model="userList" :rules="ruleCustom" hide-required-mark>
+                <Form class="main" :label-width="80" ref="userList" :model="userList" :rules="ruleCustom"
+                    hide-required-mark>
                     <FormItem prop="username" label="用户名">
                         <Input type="text" v-model="userList.username" placeholder="请输入用户名" size="large"></Input>
                     </FormItem>
@@ -28,7 +29,7 @@
                     </FormItem>
                     <FormItem>
                         <p class="warn">（注意：右上角数据仅供参考，请点击确认修改后完成修改）</p>
-                        <Button type="info" @click="updateUser" size="large">确认修改</Button>
+                        <Button type="info" @click="handleSubmit('userList')" size="large">确认修改</Button>
                     </FormItem>
                 </Form>
             </Content>
@@ -110,25 +111,32 @@
             handleExceed() {
                 this.$message.warning(`当前只能上传 1 张图片`);
             },
-            updateUser() {
-                let userData = {
-                    username: this.userList.username,
-                    avatarUrl: this.userList.avatarUrl,
-                    gender: this.userList.gender
-                }
-                this.$userApi.modifyingCurrentUser(userData)
-                    .then((result) => {
-                        if (result.ret === 200) {
-                            this.$router.push({
-                                name: 'Home'
-                            })
-                            this.$Message.success('修改成功')
-                        } else {
-                            this.$Message.error(result.msg.error)
+
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        let userData = {
+                            username: this.userList.username,
+                            avatarUrl: this.userList.avatarUrl,
+                            gender: this.userList.gender
                         }
-                    }).catch((err) => {
-                        console.log(err);
-                    });
+                        this.$userApi.modifyingCurrentUser(userData)
+                            .then((result) => {
+                                if (result.ret === 200) {
+                                    this.$router.push({
+                                        name: 'Home'
+                                    })
+                                    this.$Message.success('修改成功')
+                                } else {
+                                    this.$Message.error('图片不能为空')
+                                }
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+                    } else {
+                        this.$Message.error('发布失败');
+                    }
+                })
             }
         }
     }

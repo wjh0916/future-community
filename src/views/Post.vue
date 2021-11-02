@@ -34,7 +34,7 @@
                                 </el-dialog>
                             </FormItem>
                             <FormItem>
-                                <Button type="primary" @click="post" long>发布新话题</Button>
+                                <Button type="primary" @click="handleSubmit('newTopic')" long>发布新话题</Button>
                             </FormItem>
                         </Form>
                     </div>
@@ -158,24 +158,33 @@
             handleExceed() {
                 this.$message.warning(`当前只能上传 1 张图片`);
             },
-            post() {
-                let list = this.newTopic
-                let cid = []
-                this.cid.forEach((element, index) => {
-                    if (index > 0) {
-                        cid += ',' + element
+
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        let list = this.newTopic
+                        let cid = []
+                        this.cid.forEach((element, index) => {
+                            if (index > 0) {
+                                cid += ',' + element
+                            } else {
+                                cid = element
+                            }
+                        })
+                        list.cid = cid
+                        this.$artApi.post(list)
+                            .then((result) => {
+                                if (result.ret === 200) {
+                                    this.$router.push('/')
+                                    this.$message.success('发布成功')
+                                } else {
+                                    this.$Message.error('分类或者图片不能为空');
+                                }
+                            })
                     } else {
-                        cid = element
+                        this.$Message.error('发布失败');
                     }
                 })
-                list.cid = cid
-                this.$artApi.post(list)
-                    .then((result) => {
-                        if (result.ret === 200) {
-                            this.$router.push('/')
-                            this.$message.success('发布成功')
-                        }
-                    })
             }
         }
     }
