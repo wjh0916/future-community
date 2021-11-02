@@ -9,7 +9,7 @@
                 <div class="welcome">欢迎注册未来社区</div>
                 <div class="header">每一天，乐在沟通。</div>
                 <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" hide-required-mark>
-                    <FormItem prop="username" label="昵称">
+                    <FormItem prop="username" label="用户名">
                         <Input type="text" v-model="formCustom.username" size="large"></Input>
                     </FormItem>
                     <FormItem prop="password" label="密码">
@@ -140,7 +140,7 @@
                         required: true,
                         type: 'string',
                         validator: validatePassCheck,
-                        trigger: 'change'
+                        trigger: 'blur change'
                     }],
                     phone: [{
                         required: true,

@@ -1,34 +1,27 @@
 <template>
-    <div class="personal">
+    <div class="PostClass">
         <Layout>
             <Content class="content">
-                <div class="personalTitle">个人资料</div>
-                <Form class="main" :label-width="80" :model="userList" :rules="ruleCustom" hide-required-mark>
-                    <FormItem prop="username" label="用户名">
-                        <Input type="text" v-model="userList.username" placeholder="请输入用户名" size="large"></Input>
+                <div class="personalTitle">添加新分类</div>
+                <Form class="main" :label-width="80" hide-required-mark>
+                    <FormItem label="分类标题">
+                        <Input v-model="category.title" maxlength="20" show-word-limit></Input>
                     </FormItem>
-                    <FormItem label="性别">
-                        <RadioGroup v-model="userList.gender">
-                            <Radio label="1" border>男</Radio>
-                            <Radio label="2" border>女</Radio>
-                        </RadioGroup>
+                    <FormItem label="分类主体">
+                        <Input v-model="category.body" maxlength="50" show-word-limit></Input>
                     </FormItem>
-                    <FormItem label="手机号码">
-                        <Input type="text" v-model="userList.phone" size="large" disabled></Input>
-                    </FormItem>
-                    <FormItem label="头像">
+                    <FormItem label="图片">
                         <el-upload action="#" list-type="picture-card" :before-upload="beforeAvatarUpload"
                             :on-preview="handlePictureCardPreview" :on-change="handleChange" :on-remove="handleRemove"
                             :on-exceed="handleExceed" :limit="1" class="upImg">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="userList.avatarUrl" alt="">
+                            <img width="100%" :src="dialogImageUrl" alt="">
                         </el-dialog>
                     </FormItem>
                     <FormItem>
-                        <p class="warn">（注意：右上角数据仅供参考，请点击确认修改后完成修改）</p>
-                        <Button type="info" @click="updateUser" size="large">确认修改</Button>
+                        <Button type="primary" @click="post" size="large">发布新分类</Button>
                     </FormItem>
                 </Form>
             </Content>
@@ -37,35 +30,19 @@
 </template>
 
 <script>
-    import {
-        mapState
-    } from 'vuex'
-
     export default {
-        name: 'Personal',
+        name: 'PostClass',
         data() {
             return {
+                category: {
+                    title: '',
+                    body: '',
+                    imgUrl: '',
+                },
                 isAuth: false,
                 dialogImageUrl: '',
-                dialogVisible: false,
-                ruleCustom: {
-                    username: [{
-                            required: true,
-                            type: 'string',
-                            message: '昵称不能为空',
-                            trigger: 'blur',
-                        },
-                        {
-                            pattern: /^[\u4e00-\u9fa5a-zA-Z][\u4e00-\u9fa5a-zA-Z\d]*$/,
-                            message: '昵称必须以汉字或字母开头,其它可以是中文,字母或数字',
-                            trigger: 'change blur'
-                        }
-                    ],
-                }
+                dialogVisible: false
             }
-        },
-        computed: {
-            ...mapState(['userList'])
         },
         methods: {
             beforeAvatarUpload(file) {
@@ -76,7 +53,7 @@
                     this.$message.error("只能上传图片格式!");
                 } else {
                     if (!isLt2M) {
-                        this.$message.error("只能上传图片格式并且图片大小不能超过 500KB!");
+                        this.$message.error("只能上传图片格式并且图片大小不能超过 50MB!");
                     }
                 }
                 this.isAuth = isImg && isLt2M
@@ -87,14 +64,13 @@
                     return false
                 }
                 this.dialogImageUrl = file.url;
-                this.userList.avatar = file.url
 
                 let formData = new FormData();
                 formData.append("file", file.raw);
                 this.$commonApi.uploadFile(formData)
                     .then((res) => {
                         if (res.ret === 200) {
-                            this.userList.avatarUrl = res.data.url;
+                            this.category.imgUrl = res.data.url;
                             this.$message.success('上传成功');
                         }
                     })
@@ -104,27 +80,22 @@
                 this.dialogVisible = true;
             },
             handleRemove() {
-                this.userList.avatarUrl = ''
-                this.userList.avatar = ''
+                this.dialogImageUrl = ''
+                this.category.imgUrl = ''
             },
             handleExceed() {
                 this.$message.warning(`当前只能上传 1 张图片`);
             },
-            updateUser() {
-                let userData = {
-                    username: this.userList.username,
-                    avatarUrl: this.userList.avatarUrl,
-                    gender: this.userList.gender
-                }
-                this.$userApi.modifyingCurrentUser(userData)
+            post() {
+                this.$categoryApi.post(this.category)
                     .then((result) => {
                         if (result.ret === 200) {
                             this.$router.push({
-                                name: 'Home'
+                                name: 'Post'
                             })
-                            this.$Message.success('修改成功')
+                            this.$Message.success('发布成功')
                         } else {
-                            this.$Message.error(result.msg.error)
+                            this.$Message.success('发布失败')
                         }
                     }).catch((err) => {
                         console.log(err);
@@ -135,7 +106,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .personal {
+    .PostClass {
         height: calc(100vh - 105px);
 
         .ivu-layout {
@@ -148,7 +119,7 @@
             .personalTitle {
                 font-size: 26px;
                 font-weight: 700;
-                padding-top: 20px;
+                padding-top: 5%;
                 margin-bottom: 20px;
                 text-align: center;
             }
@@ -159,11 +130,6 @@
 
                 .ivu-form-item {
                     margin: 40px 0;
-                }
-
-                .warn {
-                    color: red;
-                    margin-bottom: 10px;
                 }
             }
         }

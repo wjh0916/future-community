@@ -2,7 +2,7 @@
   <div class="home">
     <Layout>
       <Content class="content">
-        <div class="topBar">
+        <div class="topBar" :style="'background-image:url('+require('@/assets/navbg01.jpg')+')'">
           <div class="topBar-user">
             <div class="topBar-userAvatar">
               <Avatar shape="square" :src="this.userList.avatar" class="userAvatar-img" />
@@ -19,9 +19,9 @@
         </div>
         <div class="navBar">
           <Carousel autoplay v-model="value2" :height="height" radius-dot trigger="click" loop>
-            <CarouselItem v-for="(item, index) in carouseImg" :key="index">
+            <CarouselItem v-for="(img, index) in carouseImg" :key="index">
               <div class="demo-carousel">
-                <img :src="item" alt="">
+                <img :src="img.url" alt="">
               </div>
             </CarouselItem>
           </Carousel>
@@ -99,13 +99,15 @@
       return {
         value2: 0,
         height: 'auto',
-        carouseImg: [
-          'https://picsum.photos/1600/800/?image=10',
-          'https://picsum.photos/1600/800/?image=11',
-          'https://picsum.photos/1600/800/?image=12',
-          'https://picsum.photos/1600/800/?image=13',
-          'https://picsum.photos/1600/800/?image=14'
-        ],
+        carouseImg: [{
+          url: require('@/assets/banner01.jpg')
+        }, {
+          url: require('@/assets/banner02.jpg')
+        }, {
+          url: require('@/assets/banner03.jpg')
+        }, {
+          url: require('@/assets/banner04.jpg')
+        }],
         list: [],
         praiseList: [],
       }
@@ -166,7 +168,7 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        background: url('https://picsum.photos/1600/1000/?image=10') no-repeat;
+        background-repeat: no-repeat;
         background-size: cover;
         background-position: 100%;
         padding: 20px;
@@ -218,7 +220,7 @@
         .demo-carousel {
           img {
             width: 100%;
-            height: 500px;
+            height: 580px;
           }
         }
       }

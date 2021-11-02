@@ -2,19 +2,19 @@
     <div class="top">
         <Layout>
             <Header>
-                <Menu mode="horizontal" theme="dark" active-name="home" class="navMenu">
+                <Menu mode="horizontal" theme="dark" :active-name="$route.name" class="navMenu">
                     <div class="navLeft">
-                        <MenuItem name="home" to="/" class="logo">
+                        <MenuItem name="Home" to="/" class="logo">
                         <h1>未来社区</h1>
                         </MenuItem>
-                        <MenuItem name="home" to="/">
+                        <MenuItem name="Home" to="/">
                         <span>首页</span>
                         </MenuItem>
-                        <MenuItem name="topic" :to="{name:'Topic'}">
+                        <MenuItem name="Topic" :to="{name:'Topic'}">
                         <span>话题</span>
                         </MenuItem>
-                        <MenuItem name="3" to="/">
-                        <span>我的话题</span>
+                        <MenuItem name="TopicClass" :to="{name:'TopicClass'}">
+                        <span>话题分类</span>
                         </MenuItem>
                     </div>
                     <div class="navRight">
@@ -83,7 +83,7 @@
             <Content class="content">
                 <Breadcrumb class="Breadcrumb">
                     <BreadcrumbItem>未来社区</BreadcrumbItem>
-                    <BreadcrumbItem to="/">首页</BreadcrumbItem>
+                    <BreadcrumbItem>{{$route.meta.title}}</BreadcrumbItem>
                 </Breadcrumb>
             </Content>
         </Layout>
@@ -140,7 +140,7 @@
                         min: 6,
                         max: 16,
                         message: '密码必须为6到16位数',
-                        trigger: 'change blur'
+                        trigger: 'blur change'
                     }],
                     password: [{
                             required: true,
@@ -152,14 +152,14 @@
                             min: 6,
                             max: 16,
                             message: '密码必须为6到16位数',
-                            trigger: 'change blur'
+                            trigger: 'blur change'
                         },
                     ],
                     confirmPassword: [{
                         required: true,
                         type: 'string',
                         validator: validatePassCheck,
-                        trigger: 'change'
+                        trigger: 'blur change'
                     }],
                 },
             }

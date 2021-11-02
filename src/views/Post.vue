@@ -5,22 +5,22 @@
                 <div class="main">
                     <div class="mainLeft">
                         <div class="postTitle">发布新话题</div>
-                        <Form ref="newTopic" :model="newTopic" :label-width="80" hide-required-mark>
-                            <FormItem label="话题标题">
+                        <Form ref="newTopic" :model="newTopic" :rules="ruleCustom" :label-width="80" hide-required-mark>
+                            <FormItem prop="title" label="话题标题">
                                 <Input v-model="newTopic.title" maxlength="50" show-word-limit></Input>
                             </FormItem>
                             <FormItem label="话题分类">
                                 <CheckboxGroup v-model="cid">
                                     <Checkbox :label="cate.cid" border v-for="cate in category" :key="cate.cid">
                                         {{cate.title}}</Checkbox>
-                                    <Button type="info" icon="md-add" @click="toAdd" ghost></Button>
+                                    <Button type="info" icon="md-add" @click="toPostClass" ghost></Button>
                                 </CheckboxGroup>
                             </FormItem>
-                            <FormItem label="内容">
+                            <FormItem prop="body" label="内容">
                                 <Input v-model="newTopic.body" type="textarea" :autosize="{minRows: 6,maxRows: 10}"
                                     maxlength="3000" :rows="6" show-word-limit></Input>
                             </FormItem>
-                            <FormItem label="简介">
+                            <FormItem prop="outline" label="简介">
                                 <Input v-model="newTopic.outline" maxlength="20" show-word-limit></Input>
                             </FormItem>
                             <FormItem label="图片">
@@ -65,7 +65,39 @@
                 },
                 isAuth: false,
                 dialogImageUrl: '',
-                dialogVisible: false
+                dialogVisible: false,
+                ruleCustom: {
+                    title: [{
+                        required: true,
+                        type: 'string',
+                        message: '标题不能为空',
+                        trigger: 'blur'
+                    }, {
+                        pattern: /^.*[^\d].*$/,
+                        message: '标题不能为纯数字',
+                        trigger: 'blur change'
+                    }],
+                    body: [{
+                        required: true,
+                        type: 'string',
+                        message: '内容不能为空',
+                        trigger: 'blur'
+                    }, {
+                        pattern: /^.*[^\d].*$/,
+                        message: '内容不能为纯数字',
+                        trigger: 'blur change'
+                    }],
+                    outline: [{
+                        required: true,
+                        type: 'string',
+                        message: '简介不能为空',
+                        trigger: 'blur'
+                    }, {
+                        pattern: /^.*[^\d].*$/,
+                        message: '简介不能为纯数字',
+                        trigger: 'blur change'
+                    }]
+                }
             }
         },
         created() {
@@ -79,14 +111,14 @@
                 });
         },
         methods: {
-            toAdd() {
+            toPostClass() {
                 this.$router.push({
-                    name: 'TopicClass'
+                    name: 'PostClass'
                 })
             },
 
             beforeAvatarUpload(file) {
-                const isLt2M = file.size / 1024 / 1024 < 0.5;
+                const isLt2M = file.size / 1024 / 1024 < 51.2;
                 const isImg = file.type.includes('image');
 
                 if (!isImg) {

@@ -15,7 +15,7 @@ const routes = [{
       Top: () => import('../components/Top.vue')
     },
     meta: {
-      title: '未来社区首页',
+      title: '首页',
       auth: true,
       authArr: [0, 1, 2]
     }
@@ -58,6 +58,19 @@ const routes = [{
     },
     meta: {
       title: '发布新话题',
+      auth: true,
+      authArr: [0, 1, 2]
+    }
+  },
+  {
+    path: '/postClass',
+    name: 'PostClass',
+    components: {
+      default: () => import('../views/PostClass.vue'),
+      Top: () => import('../components/Top.vue')
+    },
+    meta: {
+      title: '发布新分类',
       auth: true,
       authArr: [0, 1, 2]
     }
