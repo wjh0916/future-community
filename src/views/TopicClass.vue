@@ -46,14 +46,14 @@
         },
         methods: {
             beforeAvatarUpload(file) {
-                const isLt2M = file.size / 1024 / 1024 < 0.5;
+                const isLt2M = file.size / 1024 / 1024 < 51.2;
                 const isImg = file.type.includes('image');
 
                 if (!isImg) {
                     this.$message.error("只能上传图片格式!");
                 } else {
                     if (!isLt2M) {
-                        this.$message.error("只能上传图片格式并且图片大小不能超过 500KB!");
+                        this.$message.error("只能上传图片格式并且图片大小不能超过 50MB!");
                     }
                 }
                 this.isAuth = isImg && isLt2M

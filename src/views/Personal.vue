@@ -27,6 +27,7 @@
                         </el-dialog>
                     </FormItem>
                     <FormItem>
+                        <p class="warn">（注意：右上角数据仅供参考，请点击确认修改后完成修改）</p>
                         <Button type="info" @click="toHome" size="large" style="margin-right: 20px">返回首页</Button>
                         <Button type="info" @click="updateUser" size="large">确认修改</Button>
                     </FormItem>
@@ -49,21 +50,6 @@
                 dialogImageUrl: '',
                 dialogVisible: false
             }
-        },
-        created() {
-            if (sessionStorage.getItem("store")) {
-                this.$store.replaceState(
-                    Object.assign({},
-                        this.$store.state,
-                        JSON.parse(sessionStorage.getItem("store"))
-                    )
-                );
-                sessionStorage.removeItem("store")
-            }
-
-            window.addEventListener("beforeunload", () => {
-                sessionStorage.setItem("store", JSON.stringify(this.$store.state));
-            });
         },
         computed: {
             ...mapState(['userList'])
@@ -88,6 +74,7 @@
                     return false
                 }
                 this.dialogImageUrl = file.url;
+                this.userList.avatar = file.url
 
                 let formData = new FormData();
                 formData.append("file", file.raw);
@@ -105,6 +92,7 @@
             },
             handleRemove() {
                 this.userList.avatarUrl = ''
+                this.userList.avatar = ''
             },
             handleExceed() {
                 this.$message.warning(`当前只能上传 1 张图片`);
@@ -152,7 +140,7 @@
             .personalTitle {
                 font-size: 26px;
                 font-weight: 700;
-                padding-top: 5%;
+                padding-top: 20px;
                 margin-bottom: 20px;
                 text-align: center;
             }
@@ -163,6 +151,11 @@
 
                 .ivu-form-item {
                     margin: 40px 0;
+                }
+
+                .warn {
+                    color: red;
+                    margin-bottom: 10px;
                 }
             }
         }
