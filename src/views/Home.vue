@@ -29,14 +29,7 @@
           </div>
         </div>
         <div class="navBar">
-          <Carousel
-            autoplay
-            v-model="value2"
-            :height="height"
-            radius-dot
-            trigger="click"
-            loop
-          >
+          <Carousel autoplay v-model="imgNum" radius-dot trigger="click" loop>
             <CarouselItem v-for="(img, index) in carouseImg" :key="index">
               <div class="demo-carousel">
                 <img :src="img.url" alt="" />
@@ -52,7 +45,7 @@
             <Row :gutter="50">
               <Col
                 span="8"
-                v-for="l in list"
+                v-for="l in showList"
                 :key="l.aid"
                 style="margin: 20px 0"
               >
@@ -93,6 +86,18 @@
                 </Card>
               </Col>
             </Row>
+            <Page
+              class="page"
+              :total="list.length"
+              :current="page.pageNumber"
+              :page-size="page.pageSize"
+              :page-size-opts="[9, 15, 30, 60]"
+              @on-change="changePage"
+              @on-page-size-change="changePageSize"
+              show-total
+              show-sizer
+              show-elevator
+            />
           </div>
         </div>
       </Content>
@@ -121,7 +126,6 @@ export default {
       .list()
       .then((result) => {
         this.list = result.data;
-        console.log(this.list);
       })
       .catch((err) => {
         console.log(err);
@@ -129,8 +133,7 @@ export default {
   },
   data() {
     return {
-      value2: 0,
-      height: "auto",
+      imgNum: 0,
       carouseImg: [
         {
           url: require("@/assets/banner01.jpg"),
@@ -147,6 +150,12 @@ export default {
       ],
       list: [],
       praiseList: [],
+      page: {
+        pageNumber: 1,
+        pageSize: 9,
+        start: 1,
+        end: 9,
+      },
     };
   },
   computed: {
@@ -160,6 +169,13 @@ export default {
       } else {
         return "下午";
       }
+    },
+
+    showList() {
+      let start = (this.page.pageNumber - 1) * this.page.pageSize;
+      let end = this.page.pageNumber * this.page.pageSize;
+      let showList = this.list.slice(start, end);
+      return showList;
     },
   },
   methods: {
@@ -192,6 +208,12 @@ export default {
           }
         }
       });
+    },
+    changePage(pageNumber) {
+      this.page.pageNumber = pageNumber;
+    },
+    changePageSize(pageSize) {
+      this.page.pageSize = pageSize;
     },
   },
 };
@@ -268,6 +290,7 @@ export default {
       background: rgba(235, 235, 235, 0.363);
       padding: 20px;
       border-radius: 10px;
+      margin-bottom: 20px;
 
       .recommend-title {
         span {
@@ -358,6 +381,11 @@ export default {
               }
             }
           }
+        }
+
+        .page {
+          text-align: right;
+          margin: 20px 0;
         }
       }
     }
