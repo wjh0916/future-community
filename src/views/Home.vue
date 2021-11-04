@@ -14,7 +14,7 @@
             </div>
           </div>
           <div class="topBar-post">
-            <Button type="primary" shape="circle" size="large" @click="toPost">创建新话题</Button>
+            <Button type="primary" shape="circle" size="large" @click="toPost">创建新话题 / 分类</Button>
           </div>
         </div>
         <div class="navBar">

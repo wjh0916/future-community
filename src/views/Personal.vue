@@ -10,8 +10,8 @@
                     </FormItem>
                     <FormItem label="性别">
                         <RadioGroup v-model="userList.gender">
+                            <Radio label="0" border>女</Radio>
                             <Radio label="1" border>男</Radio>
-                            <Radio label="2" border>女</Radio>
                         </RadioGroup>
                     </FormItem>
                     <FormItem label="手机号码">
@@ -28,7 +28,7 @@
                         </el-dialog>
                     </FormItem>
                     <FormItem>
-                        <p class="warn">（注意：右上角数据仅供参考，请点击确认修改后完成修改）</p>
+                        <p class="warn">（注意：右上角数据变化仅供参考，请点击确认修改后完成修改）</p>
                         <Button type="info" @click="handleSubmit('userList')" size="large">确认修改</Button>
                     </FormItem>
                 </Form>
@@ -74,10 +74,10 @@
                 const isImg = file.type.includes('image');
 
                 if (!isImg) {
-                    this.$message.error("只能上传图片格式!");
+                    this.$Message.error("只能上传图片格式!");
                 } else {
                     if (!isLt2M) {
-                        this.$message.error("只能上传图片格式并且图片大小不能超过 500KB!");
+                        this.$Message.error("只能上传图片格式并且图片大小不能超过 500KB!");
                     }
                 }
                 this.isAuth = isImg && isLt2M
@@ -96,7 +96,7 @@
                     .then((res) => {
                         if (res.ret === 200) {
                             this.userList.avatarUrl = res.data.url;
-                            this.$message.success('上传成功');
+                            this.$Message.success('上传成功');
                         }
                     })
             },
@@ -109,7 +109,7 @@
                 this.userList.avatar = ''
             },
             handleExceed() {
-                this.$message.warning(`当前只能上传 1 张图片`);
+                this.$Message.warning(`当前只能上传 1 张图片`);
             },
 
             handleSubmit(name) {

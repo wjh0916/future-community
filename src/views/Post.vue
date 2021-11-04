@@ -122,10 +122,10 @@
                 const isImg = file.type.includes('image');
 
                 if (!isImg) {
-                    this.$message.error("只能上传图片格式!");
+                    this.$Message.error("只能上传图片格式");
                 } else {
                     if (!isLt2M) {
-                        this.$message.error("只能上传图片格式并且图片大小不能超过 500KB!");
+                        this.$Message.error("只能上传图片格式并且图片大小不能超过 500KB!");
                     }
                 }
                 this.isAuth = isImg && isLt2M
@@ -143,7 +143,7 @@
                     .then((res) => {
                         if (res.ret === 200) {
                             this.newTopic.imgUrl = res.data.url;
-                            this.$message.success('上传成功');
+                            this.$Message.success('上传成功');
                         }
                     })
             },
@@ -156,7 +156,7 @@
                 this.newTopic.imgUrl = ''
             },
             handleExceed() {
-                this.$message.warning(`当前只能上传 1 张图片`);
+                this.$Message.warning(`当前只能上传 1 张图片`);
             },
 
             handleSubmit(name) {
@@ -176,9 +176,9 @@
                             .then((result) => {
                                 if (result.ret === 200) {
                                     this.$router.push('/')
-                                    this.$message.success('发布成功')
+                                    this.$Message.success('发布成功')
                                 } else {
-                                    this.$Message.error('分类或者图片不能为空');
+                                    this.$Message.error('分类或图片不能为空');
                                 }
                             })
                     } else {

@@ -22,6 +22,8 @@
                         </el-dialog>
                     </FormItem>
                     <FormItem>
+                        <Button type="primary" style="margin-right:20px" size="large"
+                            @click="backToPost">返回话题发布</Button>
                         <Button type="primary" @click="handleSubmit('category')" size="large">发布新分类</Button>
                     </FormItem>
                 </Form>
@@ -83,10 +85,10 @@
                 const isImg = file.type.includes('image');
 
                 if (!isImg) {
-                    this.$message.error("只能上传图片格式!");
+                    this.$Message.error("只能上传图片格式!");
                 } else {
                     if (!isLt2M) {
-                        this.$message.error("只能上传图片格式并且图片大小不能超过 50MB!");
+                        this.$Message.error("只能上传图片格式并且图片大小不能超过 50MB!");
                     }
                 }
                 this.isAuth = isImg && isLt2M
@@ -104,7 +106,7 @@
                     .then((res) => {
                         if (res.ret === 200) {
                             this.category.imgUrl = res.data.url;
-                            this.$message.success('上传成功');
+                            this.$Message.success('上传成功');
                         }
                     })
             },
@@ -117,7 +119,7 @@
                 this.category.imgUrl = ''
             },
             handleExceed() {
-                this.$message.warning(`当前只能上传 1 张图片`);
+                this.$Message.warning(`当前只能上传 1 张图片`);
             },
 
             handleSubmit(name) {
@@ -131,7 +133,12 @@
                                     })
                                     this.$Message.success('发布成功')
                                 } else {
-                                    this.$Message.error('图片不能为空')
+                                    console.log(result);
+                                    this.$Message.error(
+                                        result.msg.title ? result.msg.title : '' +
+                                        '，' +
+                                        result.msg.imgUrl ? result.msg.imgUrl : ''
+                                    )
                                 }
                             }).catch((err) => {
                                 console.log(err);
@@ -139,6 +146,12 @@
                     } else {
                         this.$Message.error('发布失败');
                     }
+                })
+            },
+
+            backToPost() {
+                this.$router.push({
+                    name: 'Post'
                 })
             }
         }

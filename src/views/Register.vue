@@ -197,7 +197,7 @@
                                     this.$router.push({
                                         name: 'Login'
                                     })
-                                }, 2000)
+                                }, 1800)
                             }).catch((err) => {
                                 console.log(err);
                             });

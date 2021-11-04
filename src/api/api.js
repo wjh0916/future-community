@@ -85,6 +85,17 @@ export const userApi = {
     },
 
     /**
+     * 获取其他用户信息接口
+     * @param {*} data 
+     * @returns 
+     */
+    userPublicInfo(data) {
+        return post('/user/userPublicInfo.php', {
+            data
+        })
+    },
+
+    /**
      * 退出登录接口
      * @returns 
      */
