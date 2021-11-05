@@ -99,7 +99,7 @@ export default {
               }
               // 获得当前文章的分类
               [...this.info.cid.split(",")].forEach((element) => {
-                this.cateGory.push(classes[element]);
+                this.cateGory.push(classes[element - 1]);
               });
             }
           })

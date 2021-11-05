@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="navBar">
-          <Carousel autoplay v-model="imgNum" radius-dot trigger="click" loop>
+          <Carousel autoplay v-model="imgNum" :autoplay-speed="2400" radius-dot trigger="click" loop>
             <CarouselItem v-for="(img, index) in carouseImg" :key="index">
               <div class="demo-carousel">
                 <img :src="img.url" alt="" />
@@ -125,7 +125,7 @@ export default {
     this.$artApi
       .list()
       .then((result) => {
-        this.list = result.data;
+        this.list = result.data.reverse();
       })
       .catch((err) => {
         console.log(err);
