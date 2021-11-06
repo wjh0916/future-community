@@ -15,7 +15,8 @@ import {
   userApi,
   artApi,
   commonApi,
-  categoryApi
+  categoryApi,
+  commentApi
 } from './api/api';
 
 Vue.config.productionTip = false
@@ -25,6 +26,7 @@ Vue.prototype.$userApi = userApi
 Vue.prototype.$artApi = artApi
 Vue.prototype.$commonApi = commonApi
 Vue.prototype.$categoryApi = categoryApi
+Vue.prototype.$commentApi = commentApi
 
 Vue.use(ViewUI)
 Vue.use(Upload)

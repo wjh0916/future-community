@@ -188,3 +188,24 @@ export const categoryApi = {
         })
     }
 }
+
+// 评论接口
+export const commentApi = {
+    /**
+     * 评论列表接口
+     * @param {*} data 
+     * @returns 
+     */
+    commentList(data) {
+        return get('/comment/commentList.php', data)
+    },
+
+    /**
+     * 发布评论接口
+     * @param {*} data 
+     * @returns 
+     */
+    post(data) {
+        return post('/comment/post.php', data)
+    }
+}
