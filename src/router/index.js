@@ -13,6 +13,7 @@ const routes = [{
     components: {
       default: Home,
       Top: () => import('../components/Top.vue'),
+      Footer: () => import('../components/Footer.vue')
     },
     meta: {
       title: '首页',
@@ -41,7 +42,8 @@ const routes = [{
     name: 'Topic',
     components: {
       default: () => import('../views/Topic.vue'),
-      Top: () => import('../components/Top.vue')
+      Top: () => import('../components/Top.vue'),
+      Footer: () => import('../components/Footer.vue')
     },
     meta: {
       title: '话题',
@@ -54,7 +56,8 @@ const routes = [{
     name: 'Post',
     components: {
       default: () => import('../views/Post.vue'),
-      Top: () => import('../components/Top.vue')
+      Top: () => import('../components/Top.vue'),
+      Footer: () => import('../components/Footer.vue')
     },
     meta: {
       title: '发布新话题',
@@ -67,7 +70,8 @@ const routes = [{
     name: 'PostClass',
     components: {
       default: () => import('../views/PostClass.vue'),
-      Top: () => import('../components/Top.vue')
+      Top: () => import('../components/Top.vue'),
+      Footer: () => import('../components/Footer.vue')
     },
     meta: {
       title: '发布新分类',
@@ -80,7 +84,8 @@ const routes = [{
     name: 'TopicDetails',
     components: {
       default: () => import('../views/TopicDetails.vue'),
-      Top: () => import('../components/Top.vue')
+      Top: () => import('../components/Top.vue'),
+      Footer: () => import('../components/Footer.vue')
     },
     meta: {
       title: '话题详情',
@@ -105,7 +110,8 @@ const routes = [{
     name: 'Personal',
     components: {
       default: () => import('../views/Personal.vue'),
-      Top: () => import('../components/Top.vue')
+      Top: () => import('../components/Top.vue'),
+      Footer: () => import('../components/Footer.vue')
     },
     meta: {
       title: '个人资料',
@@ -119,7 +125,8 @@ const routes = [{
     name: 'TopicClass',
     components: {
       default: () => import('../views/TopicClass.vue'),
-      Top: () => import('../components/Top.vue')
+      Top: () => import('../components/Top.vue'),
+      Footer: () => import('../components/Footer.vue')
     },
     meta: {
       title: '话题分类',

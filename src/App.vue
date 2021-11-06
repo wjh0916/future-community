@@ -2,18 +2,10 @@
   <div id="app">
     <router-view name="Top" />
     <router-view />
+    <router-view name="Footer" />
     <BackTop></BackTop>
-    <Footer></Footer>
   </div>
 </template>
-
-<script>
-import Footer from './components/Footer.vue'
-
-export default {
-  components: {Footer}
-}
-</script>
 
 <style lang="scss">
 #app {
