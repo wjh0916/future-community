@@ -295,7 +295,8 @@ export default {
       if (this.$route.name !== "Topic") {
         this.$router.push({ name: "Topic" });
       }
-      this.$store.commit("getSearchKey", this.searchKey);
+      this.$store.dispatch("asyncGetTopicList", { body: this.searchKey });
+      // this.$store.commit("getSearchKey", this.searchKey);
     },
 
     changePassword() {

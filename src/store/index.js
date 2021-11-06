@@ -13,7 +13,6 @@ export default new Vuex.Store({
     userList: {},
     toplicList:[],
     cateGoryList:[],
-    searchKey: ''
   },
   mutations: {
     add(state, data) {
@@ -30,9 +29,6 @@ export default new Vuex.Store({
 
     getCateGoryList(state,data) {
       state.cateGoryList = data
-    },
-    getSearchKey(state,data) {
-      state.searchKey = data
     }
   },
   actions: {

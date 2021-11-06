@@ -237,7 +237,6 @@ export default {
             .register(this.formCustom)
             .then((result) => {
               if (result.ret === 200) {
-                console.log(result.msg[0]);
                 this.$Message.success("注册成功，正在自动跳转中请勿操作....");
                 setTimeout(() => {
                   this.$router.push({
@@ -245,7 +244,11 @@ export default {
                   });
                 }, 1800);
               } else {
-                this.$Messgae.error(result.msg.username)
+                this.$Message.error(
+                  result.msg.username
+                    ? result.msg.username
+                    : ""
+                );
               }
             })
             .catch((err) => {

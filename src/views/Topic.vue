@@ -71,9 +71,6 @@ import { mapState } from "vuex";
 
 export default {
   name: "Topic",
-  created() {
-    this.asyncGetTopicList();
-  },
   data() {
     return {
       praiseList: [],
@@ -86,7 +83,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["toplicList", "searchKey"]),
+    ...mapState(["toplicList"]),
 
     showList() {
       let start = (this.page.pageNumber - 1) * this.page.pageSize;
@@ -96,11 +93,6 @@ export default {
     },
   },
   methods: {
-    asyncGetTopicList() {
-      this.$store.dispatch("asyncGetTopicList", { body: this.searchKey });
-      this.$store.commit("getSearchKey", '');
-    },
-
     toTopicDetails(id) {
       this.$router.push({
         name: "TopicDetails",
