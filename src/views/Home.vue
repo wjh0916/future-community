@@ -29,7 +29,14 @@
           </div>
         </div>
         <div class="navBar">
-          <Carousel autoplay v-model="imgNum" :autoplay-speed="2400" radius-dot trigger="click" loop>
+          <Carousel
+            autoplay
+            v-model="imgNum"
+            :autoplay-speed="2400"
+            radius-dot
+            trigger="click"
+            loop
+          >
             <CarouselItem v-for="(img, index) in carouseImg" :key="index">
               <div class="demo-carousel">
                 <img :src="img.url" alt="" />
@@ -39,7 +46,7 @@
         </div>
         <div class="recommend">
           <div class="recommend-title">
-            <span>话题推荐</span>
+            <span>最新话题</span>
           </div>
           <div class="recommend-main">
             <Row :gutter="50">
@@ -86,18 +93,11 @@
                 </Card>
               </Col>
             </Row>
-            <Page
-              class="page"
-              :total="list.length"
-              :current="page.pageNumber"
-              :page-size="page.pageSize"
-              :page-size-opts="[9, 15, 30, 60]"
-              @on-change="changePage"
-              @on-page-size-change="changePageSize"
-              show-total
-              show-sizer
-              show-elevator
-            />
+            <div class="getMore">
+              <Button type="warning" size="large" :to="{ name: 'Topic' }"
+                >查看更多</Button
+              >
+            </div>
           </div>
         </div>
       </Content>
@@ -122,14 +122,7 @@ export default {
         console.log(err);
       });
 
-    this.$artApi
-      .list()
-      .then((result) => {
-        this.list = result.data.reverse();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.asyncGetTopicList();
   },
   data() {
     return {
@@ -148,18 +141,11 @@ export default {
           url: require("@/assets/banner04.jpg"),
         },
       ],
-      list: [],
       praiseList: [],
-      page: {
-        pageNumber: 1,
-        pageSize: 9,
-        start: 1,
-        end: 9,
-      },
     };
   },
   computed: {
-    ...mapState(["userList"]),
+    ...mapState(["userList", "toplicList"]),
 
     date() {
       let date = new Date(this.userList.loginTime);
@@ -172,9 +158,7 @@ export default {
     },
 
     showList() {
-      let start = (this.page.pageNumber - 1) * this.page.pageSize;
-      let end = this.page.pageNumber * this.page.pageSize;
-      let showList = this.list.slice(start, end);
+      let showList = this.toplicList.slice(0, 9);
       return showList;
     },
   },
@@ -184,6 +168,11 @@ export default {
         name: "Post",
       });
     },
+
+    asyncGetTopicList() {
+      this.$store.dispatch("asyncGetTopicList");
+    },
+
     toTopicDetails(id) {
       this.$router.push({
         name: "TopicDetails",
@@ -192,6 +181,7 @@ export default {
         },
       });
     },
+
     isPraise(index) {
       if (this.praiseList[index]) {
         this.praiseList[index] = !this.praiseList[index];
@@ -199,7 +189,7 @@ export default {
         this.praiseList[index] = true;
       }
 
-      this.list.filter((value) => {
+      this.toplicList.filter((value) => {
         if (value.aid === index) {
           if (this.praiseList[index]) {
             value.praise++;
@@ -208,12 +198,6 @@ export default {
           }
         }
       });
-    },
-    changePage(pageNumber) {
-      this.page.pageNumber = pageNumber;
-    },
-    changePageSize(pageSize) {
-      this.page.pageSize = pageSize;
     },
   },
 };
@@ -318,6 +302,10 @@ export default {
       .recommend-main {
         margin-top: 20px;
 
+        .ivu-card:hover img {
+          transform: scale(1.2);
+        }
+
         .card-img {
           width: 100%;
           height: 200px;
@@ -327,10 +315,6 @@ export default {
           img {
             width: 100%;
             transition: all 500ms;
-          }
-
-          img:hover {
-            transform: scale(1.2);
           }
         }
 
@@ -383,9 +367,15 @@ export default {
           }
         }
 
-        .page {
-          text-align: right;
+        .getMore {
+          width: 100%;
+          text-align: center;
           margin: 20px 0;
+
+          .ivu-btn  {
+            font-size: 18px;
+            letter-spacing: 2px;
+          }
         }
       }
     }

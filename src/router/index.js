@@ -12,7 +12,7 @@ const routes = [{
     name: 'Home',
     components: {
       default: Home,
-      Top: () => import('../components/Top.vue')
+      Top: () => import('../components/Top.vue'),
     },
     meta: {
       title: '首页',

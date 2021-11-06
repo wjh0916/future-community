@@ -236,13 +236,17 @@ export default {
           this.$userApi
             .register(this.formCustom)
             .then((result) => {
-              console.log(result.msg[0]);
-              this.$Message.success("注册成功，正在自动跳转中请勿操作....");
-              setTimeout(() => {
-                this.$router.push({
-                  name: "Login",
-                });
-              }, 1800);
+              if (result.ret === 200) {
+                console.log(result.msg[0]);
+                this.$Message.success("注册成功，正在自动跳转中请勿操作....");
+                setTimeout(() => {
+                  this.$router.push({
+                    name: "Login",
+                  });
+                }, 1800);
+              } else {
+                this.$Messgae.error(result.msg.username)
+              }
             })
             .catch((err) => {
               console.log(err);

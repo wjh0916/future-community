@@ -172,7 +172,7 @@ export default {
 
 <style lang="scss" scoped>
 .personal {
-  height: calc(100vh - 105px);
+  height: calc(100vh - 185px);
 
   .ivu-layout {
     height: 100%;

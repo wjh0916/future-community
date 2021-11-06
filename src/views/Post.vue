@@ -246,7 +246,7 @@ export default {
 .post {
   .content {
     padding-bottom: 40px;
-    height: calc(100vh - 105px);
+    height: calc(100vh - 185px);
   }
 
   .main {

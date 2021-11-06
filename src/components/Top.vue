@@ -24,7 +24,12 @@
           </div>
           <div class="navRight">
             <MenuItem name="navSearch" class="navSearch">
-              <Input search />
+              <Input
+                search
+                placeholder="请输入要搜索的内容"
+                v-model="searchKey"
+                @on-search="search"
+              />
             </MenuItem>
             <Submenu name="navUser">
               <template slot="title">
@@ -154,6 +159,7 @@ export default {
     };
 
     return {
+      searchKey: "",
       modal1: false,
       modal2: false,
       isAuth: false,
@@ -283,6 +289,13 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    search() {
+      if (this.$route.name !== "Topic") {
+        this.$router.push({ name: "Topic" });
+      }
+      this.$store.commit("getSearchKey", this.searchKey);
     },
 
     changePassword() {
